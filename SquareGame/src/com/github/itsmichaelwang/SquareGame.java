@@ -8,8 +8,4 @@ public class SquareGame extends Game {
 	public void create() {
 		setScreen(new GameScreen(this));
 	}
-	
-	public void toGameOverScreen() {
-		setScreen(new GameOverScreen());
-	}
 }

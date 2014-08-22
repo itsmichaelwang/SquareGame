@@ -31,16 +31,16 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		squareManController.update(delta);
-		if (!dbController.update(delta, squareMan)) {
+		if (dbController.update(delta, squareMan) != null) {
 			gameOverSequence();
 		}
 		renderer.render();
 	}
 	
-	// End game, go to game over screen
-	public void gameOverSequence() {
-		squareMan.setState(State.DEAD);
+	// End game, lock controls and go to game over screen
+	private void gameOverSequence() {
 		Gdx.input.setInputProcessor(null);
+		squareMan.setState(State.DEAD);
 	}
 
 	@Override

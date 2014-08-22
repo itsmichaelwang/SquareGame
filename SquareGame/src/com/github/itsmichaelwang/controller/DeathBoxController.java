@@ -28,7 +28,7 @@ public class DeathBoxController {
 		stopWatch = 0;
 	}
 	
-	public boolean update(float delta, SquareMan squareMan) {
+	public Array<Vector2> update(float delta, SquareMan squareMan) {
 		stopWatch = stopWatch + delta;
 		if (stopWatch >= spawnInterval) {
 			stopWatch = stopWatch - spawnInterval;
@@ -43,11 +43,21 @@ public class DeathBoxController {
 				activeBoxes.removeValue(db, true);
 			} else {
 				if(hasCollided(squareMan, db)) {
-					return false;
+					// Return the Vector showing the angle of collision between the two objects
+					Array<Vector2> collisionPath = new Array<Vector2>();
+					// Center of the DeathBox
+					collisionPath.add(new Vector2(
+							db.getPosition().x + db.getBounds().x / 2,
+							db.getPosition().y + db.getBounds().y / 2));
+					// Center of SquareMan
+					collisionPath.add(new Vector2(
+							squareMan.getPosition().x + squareMan.getBounds().x / 2,
+							squareMan.getPosition().y + squareMan.getBounds().y / 2));
+					return collisionPath;
 				}
 			}
 		}
-		return true;
+		return null;
 	}
 	
 	// In this case, width and height are the dimensions of the game camera
