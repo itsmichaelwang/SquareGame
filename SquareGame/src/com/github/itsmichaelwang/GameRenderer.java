@@ -9,13 +9,12 @@ import com.badlogic.gdx.utils.Array;
 import com.github.itsmichaelwang.characters.*;
 
 public class GameRenderer {
-	private static final float CAMERA_WIDTH = 20f;
-	public static float getCameraWidth() { return CAMERA_WIDTH; }
-	private static final float CAMERA_HEIGHT = 15f;
-	public static float getCameraHeight() { return CAMERA_HEIGHT; }
+	private final float CAMERA_WIDTH = 20f;
+	private final float CAMERA_HEIGHT = 15f;
 	
 	private World world;
 	private OrthographicCamera cam;
+	public OrthographicCamera getCamera() { return cam; } 
 	
 	/** Draw rectangles **/
 	ShapeRenderer debugRenderer = new ShapeRenderer();

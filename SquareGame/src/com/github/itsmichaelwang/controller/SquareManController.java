@@ -3,16 +3,20 @@ package com.github.itsmichaelwang.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.itsmichaelwang.GameRenderer;
+import com.badlogic.gdx.graphics.Camera;
 import com.github.itsmichaelwang.characters.SquareMan;
 import com.github.itsmichaelwang.characters.SquareMan.State;
 import com.github.itsmichaelwang.characters.World;
 
 public class SquareManController {
 	private SquareMan squareMan;
+	private float viewportWidth;
+	private float viewportHeight;
 	
-	public SquareManController(World world) {
+	public SquareManController(World world, Camera cam) {
 		this.squareMan = world.getSquareMan();
+		this.viewportWidth = cam.viewportWidth;
+		this.viewportHeight = cam.viewportHeight;
 	}
 	
 	private static final float DAMP = 0.9f;
@@ -53,7 +57,7 @@ public class SquareManController {
 		squareMan.update(delta);
 		
 		// Make sure squareMan doesn't fall off the screen
-		checkBounds(GameRenderer.getCameraWidth(), GameRenderer.getCameraHeight());
+		checkBounds(viewportWidth, viewportHeight);
 	}
 	
 	private void processInput() {

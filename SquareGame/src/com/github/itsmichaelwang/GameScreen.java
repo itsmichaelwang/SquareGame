@@ -39,8 +39,8 @@ public class GameScreen implements Screen, InputProcessor {
 		world = new World();
 		renderer = new GameRenderer(world);
 		squareMan = world.getSquareMan();
-		squareManController = new SquareManController(world);
-		dbController = new DeathBoxController(world);
+		squareManController = new SquareManController(world, renderer.getCamera());
+		dbController = new DeathBoxController(world, renderer.getCamera());
 		Gdx.input.setInputProcessor(this);
 	}
 
