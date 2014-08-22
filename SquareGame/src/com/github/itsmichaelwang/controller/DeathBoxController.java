@@ -1,11 +1,9 @@
 package com.github.itsmichaelwang.controller;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.github.itsmichaelwang.GameRenderer;
 import com.github.itsmichaelwang.characters.DeathBox;
 import com.github.itsmichaelwang.characters.SquareMan;
 import com.github.itsmichaelwang.characters.World;
@@ -30,7 +28,7 @@ public class DeathBoxController {
 		stopWatch = 0;
 	}
 	
-	public void update(float delta, SquareMan squareMan) {
+	public boolean update(float delta, SquareMan squareMan) {
 		stopWatch = stopWatch + delta;
 		if (stopWatch >= spawnInterval) {
 			stopWatch = stopWatch - spawnInterval;
@@ -45,10 +43,11 @@ public class DeathBoxController {
 				activeBoxes.removeValue(db, true);
 			} else {
 				if(hasCollided(squareMan, db)) {
-					System.out.println("Collision!");
+					return false;
 				}
 			}
 		}
+		return true;
 	}
 	
 	// In this case, width and height are the dimensions of the game camera

@@ -7,10 +7,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.github.itsmichaelwang.characters.SquareMan;
 import com.github.itsmichaelwang.characters.World;
+import com.github.itsmichaelwang.characters.SquareMan.State;
 import com.github.itsmichaelwang.controller.DeathBoxController;
 import com.github.itsmichaelwang.controller.SquareManController;
 
 public class GameScreen implements Screen, InputProcessor {
+	SquareGame squareGame;
 	World world;
 	GameRenderer renderer;
 	SquareMan squareMan;
@@ -19,13 +21,26 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	private int width, height;
 	
+	// Pull in squareGame so we can switch screens around
+	public GameScreen(SquareGame squareGame) {
+		this.squareGame = squareGame;
+	}
+	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		squareManController.update(delta);
-		dbController.update(delta, squareMan);
+		if (!dbController.update(delta, squareMan)) {
+			gameOverSequence();
+		}
 		renderer.render();
+	}
+	
+	// End game, go to game over screen
+	public void gameOverSequence() {
+		squareMan.setState(State.DEAD);
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override
@@ -61,8 +76,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override
@@ -122,5 +136,4 @@ public class GameScreen implements Screen, InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

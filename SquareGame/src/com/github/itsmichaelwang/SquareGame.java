@@ -6,6 +6,10 @@ public class SquareGame extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new GameScreen());
+		setScreen(new GameScreen(this));
+	}
+	
+	public void toGameOverScreen() {
+		setScreen(new GameOverScreen());
 	}
 }
