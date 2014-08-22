@@ -29,6 +29,11 @@ public class GameRenderer {
 	
 	public void render() {
 		debugRenderer.setProjectionMatrix(cam.combined);
+		drawSquareMan();
+		drawDeathBoxes();
+	}
+	
+	private void drawSquareMan() {
 		debugRenderer.begin(ShapeType.Rectangle);
 		
 		// draw SquareMan
@@ -38,6 +43,12 @@ public class GameRenderer {
 		float y1 = squareMan.getPosition().y;
 		debugRenderer.setColor(new Color(0, 0, 1, 1));
 		debugRenderer.rect(x1, y1, rect.width, rect.height);
+		
+		debugRenderer.end();
+	}
+	
+	private void drawDeathBoxes() {
+		debugRenderer.begin(ShapeType.Rectangle);
 		
 		// draw DeathBoxes
 		debugRenderer.setColor(1, 0, 0, 1);
