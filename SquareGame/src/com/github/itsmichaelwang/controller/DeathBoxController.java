@@ -43,17 +43,7 @@ public class DeathBoxController {
 				activeBoxes.removeValue(db, true);
 			} else {
 				if(hasCollided(squareMan, db)) {
-					// Return the Vector showing the angle of collision between the two objects
-					Array<Vector2> collisionPath = new Array<Vector2>();
-					// Center of the DeathBox
-					collisionPath.add(new Vector2(
-							db.getPosition().x + db.getBounds().x / 2,
-							db.getPosition().y + db.getBounds().y / 2));
-					// Center of SquareMan
-					collisionPath.add(new Vector2(
-							squareMan.getPosition().x + squareMan.getBounds().x / 2,
-							squareMan.getPosition().y + squareMan.getBounds().y / 2));
-					return collisionPath;
+
 				}
 			}
 		}
@@ -74,35 +64,46 @@ public class DeathBoxController {
 				db = new DeathBox(
 						SIZE,
 						new Vector2(-SIZE, spawnPosSeed*(viewportHeight-SIZE)),
-						new Vector2(spawnVelSeed + 4, 0));
+						new Vector2(spawnVelSeed * 4 + 1, 0));
 				break;
 			case 1:
 				// Top side
 				db = new DeathBox(
 						SIZE,
 						new Vector2(spawnPosSeed*(viewportWidth-SIZE), viewportHeight),
-						new Vector2(0, spawnVelSeed - 5));
+						new Vector2(0, spawnVelSeed * -4 - 1));
 				break;
 			default:
 				// Right side
 				db = new DeathBox(
 						SIZE,
 						new Vector2(viewportWidth, spawnPosSeed*(viewportHeight-SIZE)),
-						new Vector2(spawnVelSeed - 5, 0));
+						new Vector2(spawnVelSeed * -4 - 1, 0));
 		}
 		activeBoxes.add(db);
 	}
 	
 	// Check to see if SquareMan hit a box
 	private boolean hasCollided(SquareMan squareMan, DeathBox db) {
-		if (squareMan.getPosition().x + squareMan.getBounds().x <= db.getPosition().x)
+		if (squareMan.getPosition().x + squareMan.getBounds().width <= db.getPosition().x)
 			return false;
-		if (db.getPosition().x + db.getBounds().x <= squareMan.getPosition().x)
+		if (db.getPosition().x + db.getBounds().width <= squareMan.getPosition().x)
 			return false;
-		if (squareMan.getPosition().y + squareMan.getBounds().y <= db.getPosition().y)
+		if (squareMan.getPosition().y + squareMan.getBounds().height <= db.getPosition().y)
 			return false;
-		if (db.getPosition().y + db.getBounds().y <= squareMan.getPosition().y)
+		if (db.getPosition().y + db.getBounds().height <= squareMan.getPosition().y)
 			return false;
+		
+		// Collision handling
+		Vector2 squareManCenterofMass = new Vector2(
+				squareMan.getPosition().x + squareMan.getBounds().width / 2,
+				squareMan.getPosition().y + squareMan.getBounds().height / 2);
+		Vector2 DeathBoxCenterofMass = new Vector2(
+				db.getPosition().x + db.getBounds().width / 2,
+				db.getPosition().y + db.getBounds().height / 2);
+		
+		
+		
 		return true;
 	}
 }

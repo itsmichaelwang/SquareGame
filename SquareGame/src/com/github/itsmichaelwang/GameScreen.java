@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.github.itsmichaelwang.characters.SquareMan;
 import com.github.itsmichaelwang.characters.World;
 import com.github.itsmichaelwang.characters.SquareMan.State;
@@ -31,14 +33,15 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		squareManController.update(delta);
-		if (dbController.update(delta, squareMan) != null) {
-			gameOverSequence();
+		Array<Vector2> collisionPath;
+		if ((collisionPath = dbController.update(delta, squareMan)) != null) {
+			gameOverSequence(collisionPath);
 		}
 		renderer.render();
 	}
 	
 	// End game, lock controls and go to game over screen
-	private void gameOverSequence() {
+	private void gameOverSequence(Array<Vector2> collisionPath) {
 		Gdx.input.setInputProcessor(null);
 		squareMan.setState(State.DEAD);
 	}

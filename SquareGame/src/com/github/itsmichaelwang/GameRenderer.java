@@ -10,8 +10,8 @@ import com.github.itsmichaelwang.characters.*;
 import com.github.itsmichaelwang.characters.SquareMan.State;
 
 public class GameRenderer {
-	private final float CAMERA_WIDTH = 20f;
-	private final float CAMERA_HEIGHT = 15f;
+	private final float CAMERA_WIDTH = 10f;
+	private final float CAMERA_HEIGHT = 7f;
 	
 	private World world;
 	private OrthographicCamera cam;

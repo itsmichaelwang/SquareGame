@@ -20,9 +20,9 @@ public class SquareManController {
 	}
 	
 	private static final float DAMP = 0.9f;
-	private static final float RUN_ACCEL = 40f;
-	private static final float JETPACK_ACCEL = 40f;
-	private static final float GRAVITY = -20f;
+	private static final float RUN_ACCEL = 20f;
+	private static final float JETPACK_ACCEL = 20f;
+	private static final float GRAVITY = -10f;
 	private static final float MAX_RUN_SPEED = 20f;
 	private static final float TERMINAL_VELOCITY = 20f;
 	
