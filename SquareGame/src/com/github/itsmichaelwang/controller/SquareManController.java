@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
+import com.github.itsmichaelwang.characters.DeathBox;
 import com.github.itsmichaelwang.characters.SquareMan;
 import com.github.itsmichaelwang.characters.SquareMan.State;
 import com.github.itsmichaelwang.characters.World;
@@ -22,7 +24,7 @@ public class SquareManController {
 	private static final float DAMP = 0.9f;
 	private static final float RUN_ACCEL = 20f;
 	private static final float JETPACK_ACCEL = 20f;
-	private static final float GRAVITY = -10f;
+	public static final float GRAVITY = -10f;
 	private static final float MAX_RUN_SPEED = 20f;
 	private static final float TERMINAL_VELOCITY = 20f;
 	
@@ -58,6 +60,26 @@ public class SquareManController {
 		
 		// Make sure squareMan doesn't fall off the screen
 		checkBounds(viewportWidth, viewportHeight);
+	}
+	
+	// Simulate the collision between SquareMan and a DeathBox on the squareMan side
+	public void killSquareMan(DeathBox db) {
+		squareMan.setState(State.DEAD);
+		final float COLLISION_MAGNITUDE = db.getVelocity().len()*2;
+		
+		// Collision handling - create a unit vector from the DeathBox to SquareMan
+		Vector2 squareManCenterofMass = new Vector2(
+				squareMan.getPosition().x + squareMan.getBounds().width / 2,
+				squareMan.getPosition().y + squareMan.getBounds().height / 2);
+		Vector2 dbCenterofMass = new Vector2(
+				db.getPosition().x + db.getBounds().width / 2,
+				db.getPosition().y + db.getBounds().height / 2);
+		
+		Vector2 collisionPath = squareManCenterofMass.tmp().sub(dbCenterofMass);
+		float magnitude = squareManCenterofMass.dst(dbCenterofMass);
+		collisionPath = collisionPath.mul(1/magnitude);
+		squareMan.setVelocity(collisionPath.mul(COLLISION_MAGNITUDE));
+		squareMan.setAcceleration(new Vector2(0f, GRAVITY));
 	}
 	
 	private void processInput() {

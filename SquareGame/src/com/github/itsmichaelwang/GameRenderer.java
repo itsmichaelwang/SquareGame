@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.github.itsmichaelwang.characters.*;
-import com.github.itsmichaelwang.characters.SquareMan.State;
 
 public class GameRenderer {
 	private final float CAMERA_WIDTH = 10f;
@@ -36,19 +35,16 @@ public class GameRenderer {
 	
 	private void drawSquareMan() {
 		SquareMan squareMan = world.getSquareMan();
-		if (squareMan.getState() == State.DEAD) {
-			// draw dead SquareMan
-		} else {
-			debugRenderer.begin(ShapeType.Rectangle);
-			// draw SquareMan
-			Rectangle rect = squareMan.getBounds();
-			float x1 = squareMan.getPosition().x;
-			float y1 = squareMan.getPosition().y;
-			debugRenderer.setColor(new Color(0, 0, 1, 1));
-			debugRenderer.rect(x1, y1, rect.width, rect.height);
-			
-			debugRenderer.end();
-		}
+
+		debugRenderer.begin(ShapeType.Rectangle);
+		// draw SquareMan
+		Rectangle rect = squareMan.getBounds();
+		float x1 = squareMan.getPosition().x;
+		float y1 = squareMan.getPosition().y;
+		debugRenderer.setColor(new Color(0, 0, 1, 1));
+		debugRenderer.rect(x1, y1, rect.width, rect.height);
+		
+		debugRenderer.end();
 	}
 	
 	private void drawDeathBoxes() {
@@ -60,7 +56,7 @@ public class GameRenderer {
 		for (DeathBox db : activeDeathBoxes) {
 			float x2 = db.getPosition().x;
 			float y2 = db.getPosition().y;
-			debugRenderer.rect(x2, y2, db.getBounds().x, db.getBounds().y);
+			debugRenderer.rect(x2, y2, db.getBounds().width, db.getBounds().height);
 		}
 		
 		debugRenderer.end();

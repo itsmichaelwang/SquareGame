@@ -33,17 +33,22 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		squareManController.update(delta);
-		Array<Vector2> collisionPath;
-		if ((collisionPath = dbController.update(delta, squareMan)) != null) {
-			gameOverSequence(collisionPath);
+		dbController.update(delta, squareMan);
+		if (dbController.isGameOver()) {
+			gameOverSequence();
+			dbController.setGameOver(false);
 		}
 		renderer.render();
 	}
 	
 	// End game, lock controls and go to game over screen
-	private void gameOverSequence(Array<Vector2> collisionPath) {
+	private void gameOverSequence() {
 		Gdx.input.setInputProcessor(null);
-		squareMan.setState(State.DEAD);
+		squareManController.leftReleased();
+		squareManController.rightReleased();
+		squareManController.jumpReleased();
+		squareManController.killSquareMan(dbController.getKillerBox());
+		System.out.println();
 	}
 
 	@Override

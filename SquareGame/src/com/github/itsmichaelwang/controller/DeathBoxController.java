@@ -21,6 +21,13 @@ public class DeathBoxController {
 	private float viewportWidth;
 	private float viewportHeight;
 	
+	// Control Game Over
+	private boolean isGameOver = false;
+	public boolean isGameOver() { return isGameOver; }
+	public void setGameOver(boolean isGameOver) { this.isGameOver = isGameOver; }
+	private DeathBox killerBox = null;
+	public DeathBox getKillerBox() { return killerBox; }
+	
 	public DeathBoxController(World world, Camera cam) {
 		this.activeBoxes = world.getActiveBoxes();
 		this.viewportWidth = cam.viewportWidth;
@@ -28,7 +35,7 @@ public class DeathBoxController {
 		stopWatch = 0;
 	}
 	
-	public Array<Vector2> update(float delta, SquareMan squareMan) {
+	public void update(float delta, SquareMan squareMan) {
 		stopWatch = stopWatch + delta;
 		if (stopWatch >= spawnInterval) {
 			stopWatch = stopWatch - spawnInterval;
@@ -38,16 +45,15 @@ public class DeathBoxController {
 		// Update all the box positions
 		for (DeathBox db : activeBoxes) {
 			db.update(delta);
-			// If it is out of bounds, remove it to save memory. otherwise, check for collisions
-			if (db.getPosition().x < -db.getBounds().x || db.getPosition().x > viewportWidth || db.getPosition().y < -db.getBounds().y) {
+			// If it is out of bounds, remove it to save memory
+			if (db.getPosition().x < -db.getBounds().width || db.getPosition().x > viewportWidth || db.getPosition().y < -db.getBounds().height) {
 				activeBoxes.removeValue(db, true);
-			} else {
-				if(hasCollided(squareMan, db)) {
-
-				}
+			}
+			if (hasCollided(squareMan, db)) {
+				isGameOver = true;
+				this.killerBox = db;
 			}
 		}
-		return null;
 	}
 	
 	// In this case, width and height are the dimensions of the game camera
@@ -93,17 +99,6 @@ public class DeathBoxController {
 			return false;
 		if (db.getPosition().y + db.getBounds().height <= squareMan.getPosition().y)
 			return false;
-		
-		// Collision handling
-		Vector2 squareManCenterofMass = new Vector2(
-				squareMan.getPosition().x + squareMan.getBounds().width / 2,
-				squareMan.getPosition().y + squareMan.getBounds().height / 2);
-		Vector2 DeathBoxCenterofMass = new Vector2(
-				db.getPosition().x + db.getBounds().width / 2,
-				db.getPosition().y + db.getBounds().height / 2);
-		
-		
-		
 		return true;
 	}
 }

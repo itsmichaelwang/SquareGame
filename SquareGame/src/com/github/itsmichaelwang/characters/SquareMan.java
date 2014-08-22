@@ -18,8 +18,10 @@ public class SquareMan {
 	public Vector2 getPosition() { return position; }
 	Vector2 velocity = new Vector2();
 	public Vector2 getVelocity() { return velocity; }
+	public void setVelocity(Vector2 velocity) { this.velocity = velocity; }
 	Vector2 acceleration = new Vector2();
 	public Vector2 getAcceleration() { return acceleration; }
+	public void setAcceleration(Vector2 acceleration) { this.acceleration = acceleration; }
 	State state = State.IDLE;
 	public State getState() { return state; }
 	public void setState(State state) { this.state = state; }
@@ -34,7 +36,4 @@ public class SquareMan {
 	public void update(float delta) {
 		position.add(velocity.cpy().mul(delta));
 	}
-	
-	
-	
 }
