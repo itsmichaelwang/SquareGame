@@ -21,7 +21,7 @@ public class SquareManController {
 		this.viewportHeight = cam.viewportHeight;
 	}
 	
-	private static final float DAMP = 0.9f;
+	private static float DAMP = 0.9f;
 	private static final float RUN_ACCEL = 20f;
 	private static final float JETPACK_ACCEL = 20f;
 	public static final float GRAVITY = -10f;
@@ -60,11 +60,14 @@ public class SquareManController {
 		
 		// Make sure squareMan doesn't fall off the screen
 		checkBounds(viewportWidth, viewportHeight);
+		
+		
 	}
 	
 	// Simulate the collision between SquareMan and a DeathBox on the squareMan side
 	public void killSquareMan(DeathBox db) {
 		squareMan.setState(State.DEAD);
+		SquareManController.DAMP = 0.97f;	// Dead things probably fly farther O_o
 		final float COLLISION_MAGNITUDE = db.getVelocity().len()*2;
 		
 		// Collision handling - create a unit vector from the DeathBox to SquareMan
@@ -85,24 +88,36 @@ public class SquareManController {
 	private void processInput() {
 		if (keys.get(Keys.JUMP)) {
 			squareMan.getAcceleration().y = JETPACK_ACCEL;
-			squareMan.setState(State.BOOSTING);
 		} else {
 			squareMan.getAcceleration().y = GRAVITY;
-			if (squareMan.getVelocity().x == 0) {
-				squareMan.setState(State.IDLE);
-			} else {
-				squareMan.setState(State.MOVING);
-			}
 		}
 		if (keys.get(Keys.LEFT)) {
 			squareMan.getAcceleration().x = -RUN_ACCEL;
-			squareMan.setState(State.MOVING);
+			if (squareMan.getAcceleration().y > 0) {
+				squareMan.setState(State.BOOST_LEFT);
+			} else {
+				squareMan.setState(State.MOVE_LEFT);
+			}
 		} else if (keys.get(Keys.RIGHT)) {
 			squareMan.getAcceleration().x = RUN_ACCEL;
-			squareMan.setState(State.MOVING);
+			if (squareMan.getAcceleration().y > 0) {
+				squareMan.setState(State.BOOST_RIGHT);
+			} else {
+				squareMan.setState(State.MOVE_RIGHT);
+			}
 		} else {
 			squareMan.getAcceleration().x = 0;
-			squareMan.setState(State.IDLE);
+			if (squareMan.getAcceleration().y > 0) {
+				squareMan.setState(State.BOOST_UP);
+			} else {
+				if (squareMan.getPosition().y > 0 ||
+						squareMan.getVelocity().x != 0) {
+					squareMan.setState(State.FALLING);
+				} else {
+					squareMan.setState(State.IDLE);
+				}
+			}
+			
 		}
 	}
 	

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.github.itsmichaelwang.characters.SquareMan;
 import com.github.itsmichaelwang.characters.World;
 import com.github.itsmichaelwang.characters.SquareMan.State;
@@ -22,6 +23,11 @@ public class GameScreen implements Screen, InputProcessor {
 	DeathBoxController dbController;
 	
 	private int width, height;
+	private long endGameTimer = 0;
+	private enum GameState {
+		RUNNING, RESTARTING
+	}
+	GameState gameState;
 	
 	// Pull in squareGame so we can switch screens around
 	public GameScreen(SquareGame squareGame) {
@@ -37,6 +43,13 @@ public class GameScreen implements Screen, InputProcessor {
 		if (dbController.isGameOver()) {
 			gameOverSequence();
 			dbController.setGameOver(false);
+			endGameTimer = TimeUtils.millis();
+			gameState = GameState.RESTARTING;
+		}
+		if (gameState == GameState.RESTARTING) {
+			if (TimeUtils.millis() - endGameTimer > 5000) {
+				show();
+			}
 		}
 		renderer.render();
 	}
@@ -59,6 +72,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
+		gameState = GameState.RUNNING;
 		world = new World();
 		renderer = new GameRenderer(world);
 		squareMan = world.getSquareMan();
